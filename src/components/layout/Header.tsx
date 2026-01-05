@@ -7,14 +7,14 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 
 export function Header() {
-  const { getTotalItems } = useCart();
+  const { totalItems } = useCart();
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  const itemCount = isMounted ? getTotalItems() : 0;
+  const itemCount = isMounted ? totalItems : 0;
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
