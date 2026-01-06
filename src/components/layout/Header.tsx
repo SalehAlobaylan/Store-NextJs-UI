@@ -23,7 +23,7 @@ export function Header() {
           <div className="flex items-center gap-2">
             <Link href="/" className="flex items-center gap-2 font-bold text-xl">
               <Store className="h-6 w-6" />
-              <span>FakeStore</span>
+              <span>Store</span>
             </Link>
           </div>
 
