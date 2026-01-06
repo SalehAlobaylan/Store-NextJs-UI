@@ -1,14 +1,28 @@
 ## Fake Store UI
 
-Simple e-commerce frontend built with Next.js (App Router), TypeScript, Tailwind CSS, Zustand, and shadcn/ui. Data will come from **https://fakestoreapi.com** following the Figma reference design (https://www.figma.com/community/file/1299098199775509142).
+Simple e-commerce frontend built with Next.js (App Router), TypeScript, Tailwind CSS, Zustand, and shadcn/ui.
+
+Data will come from **https://fakestoreapi.com** following the Figma reference design (https://www.figma.com/community/file/1299098199775509142).
 
 ### Quickstart
 
 ```bash
 npm install
 npm run dev
-# open http://localhost:3000
 ```
+#### open http://localhost:3000
+Or use Docker:
+
+#### Using Docker Compose
+```bash
+docker-compose up --build
+```
+#### Or using Docker directly
+```
+docker build -f .docker/Dockerfile -t store-nextjs-ui .
+docker run -p 3000:3000 store-nextjs-ui
+```
+---
 
 ### Environment
 
@@ -17,17 +31,3 @@ Copy `.env.example` to `.env.local` if you need to override the default API URL.
 ```
 NEXT_PUBLIC_API_URL=https://fakestoreapi.com
 ```
-
-### Project Layout (in progress)
-
-- `src/app` — Next.js App Router pages (/, /product/[id], /cart)
-- `src/components` — UI building blocks (layout, products, cart, ui)
-- `src/lib` — shared utilities and API helpers
-- `src/store` — Zustand store (cart)
-- `src/types` — TypeScript contracts for products/cart
-- `.docker/` — Docker assets (coming in a later phase)
-
-### Current Status
-
-- Phase 1 scaffolding complete: Next.js + Tailwind + shadcn/ui initialized, base routes stubbed, env template added.
-- Upcoming phases will implement API integration, cart state, and full UI per Figma.
