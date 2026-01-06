@@ -1,11 +1,16 @@
 import { getProducts } from "@/lib/api";
 import { ProductGrid } from "@/components/products/ProductGrid";
 
-// Force runtime rendering to avoid build-time fetches being blocked by Fake Store API
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const products = await getProducts();
+  let products;
+  try {
+    products = await getProducts();
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    throw error;
+  }
 
   return (
     <div className="container mx-auto px-4 py-8 md:px-6">

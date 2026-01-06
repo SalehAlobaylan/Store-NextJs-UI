@@ -25,8 +25,10 @@ export const useCartStore = create<CartState>()(
             console.warn("Invalid product or quantity");
             return state;
           }
-          
-          const existing = state.items.find((item) => item.product.id === product.id);
+
+          const existing = state.items.find(
+            (item) => item.product.id === product.id
+          );
           if (existing) {
             return {
               items: state.items.map((item) =>
@@ -45,14 +47,16 @@ export const useCartStore = create<CartState>()(
             console.warn("Invalid product ID for removal");
             return state;
           }
-          
+
           // Check if item exists before removing
-          const exists = state.items.some((item) => item.product.id === productId);
+          const exists = state.items.some(
+            (item) => item.product.id === productId
+          );
           if (!exists) {
             console.warn(`Product ${productId} not found in cart`);
             return state;
           }
-          
+
           return {
             items: state.items.filter((item) => item.product.id !== productId),
           };
@@ -64,26 +68,34 @@ export const useCartStore = create<CartState>()(
             console.warn("Invalid product ID or quantity");
             return state;
           }
-          
+
           // Remove item if quantity is 0 or negative
           if (quantity <= 0) {
             return {
-              items: state.items.filter((item) => item.product.id !== productId),
+              items: state.items.filter(
+                (item) => item.product.id !== productId
+              ),
             };
           }
-          
+
           // Cap quantity at reasonable maximum (999)
           const validatedQuantity = Math.min(quantity, 999);
-          
-          const exists = state.items.some((item) => item.product.id === productId);
+
+          const exists = state.items.some(
+            (item) => item.product.id === productId
+          );
           if (!exists) {
-            console.warn(`Cannot update quantity: Product ${productId} not in cart`);
+            console.warn(
+              `Cannot update quantity: Product ${productId} not in cart`
+            );
             return state;
           }
-          
+
           return {
             items: state.items.map((item) =>
-              item.product.id === productId ? { ...item, quantity: validatedQuantity } : item
+              item.product.id === productId
+                ? { ...item, quantity: validatedQuantity }
+                : item
             ),
           };
         }),
@@ -105,5 +117,7 @@ export const useCartStore = create<CartState>()(
 );
 
 export const selectCartItems = (state: CartState): CartItem[] => state.items;
-export const selectCartCount = (state: CartState): number => state.getTotalItems();
-export const selectCartTotal = (state: CartState): number => state.getTotalPrice();
+export const selectCartCount = (state: CartState): number =>
+  state.getTotalItems();
+export const selectCartTotal = (state: CartState): number =>
+  state.getTotalPrice();

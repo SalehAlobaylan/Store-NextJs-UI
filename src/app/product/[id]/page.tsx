@@ -17,22 +17,23 @@ export default async function ProductPage({ params }: PageProps) {
     notFound();
   }
   
+  let product;
   try {
-    const product = await getProduct(id);
-    
-    // Validate product data
-    if (!product || !product.id || !product.title || !product.price) {
-      console.error("Invalid product data received");
-      notFound();
-    }
-
-    return (
-      <div className="container mx-auto px-4 py-8 md:px-6">
-        <ProductDetails product={product} />
-      </div>
-    );
+    product = await getProduct(id);
   } catch (error) {
     console.error("Error fetching product:", error);
     notFound();
   }
+
+  // Validate product data
+  if (!product || !product.id || !product.title || !product.price) {
+    console.error("Invalid product data received");
+    notFound();
+  }
+
+  return (
+    <div className="container mx-auto px-4 py-8 md:px-6">
+      <ProductDetails product={product} />
+    </div>
+  );
 }

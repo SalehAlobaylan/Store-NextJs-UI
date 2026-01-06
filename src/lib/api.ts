@@ -45,17 +45,21 @@ async function fetchJson<T>(path: string, init?: RequestInit): Promise<T> {
     return body as T;
   } catch (error) {
     if (error instanceof ApiError) throw error;
-    throw new ApiError("Network error while contacting Fake Store API", undefined, error);
+    throw new ApiError(
+      "Network error while contacting Fake Store API",
+      undefined,
+      error
+    );
   }
 }
 
 export async function getProducts(): Promise<Product[]> {
   const products = await fetchJson<Product[]>("/products");
-  
+
   if (!products || !Array.isArray(products)) {
     throw new ApiError("Invalid response: expected array of products", 500);
   }
-  
+
   return products;
 }
 
@@ -63,13 +67,13 @@ export async function getProduct(id: number | string): Promise<Product> {
   if (!id || id === "" || id === "undefined" || id === "null") {
     throw new ApiError("Invalid product ID", 400);
   }
-  
+
   const product = await fetchJson<Product>(`/products/${id}`);
-  
+
   if (!product || typeof product !== "object") {
     throw new ApiError("Product not found", 404);
   }
-  
+
   return product;
 }
 
@@ -77,6 +81,10 @@ export async function getCategories(): Promise<Category[]> {
   return fetchJson<Category[]>("/products/categories");
 }
 
-export async function getProductsByCategory(category: string): Promise<Product[]> {
-  return fetchJson<Product[]>(`/products/category/${encodeURIComponent(category)}`);
+export async function getProductsByCategory(
+  category: string
+): Promise<Product[]> {
+  return fetchJson<Product[]>(
+    `/products/category/${encodeURIComponent(category)}`
+  );
 }
