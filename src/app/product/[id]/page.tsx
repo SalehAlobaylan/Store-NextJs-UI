@@ -2,6 +2,9 @@ import { getProduct } from "@/lib/api";
 import { ProductDetails } from "@/components/products/ProductDetails";
 import { notFound } from "next/navigation";
 
+// Force dynamic rendering so product fetch happens at request time
+export const dynamic = "force-dynamic";
+
 interface PageProps {
   params: Promise<{ id: string }>;
 }

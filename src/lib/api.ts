@@ -20,10 +20,13 @@ async function fetchJson<T>(path: string, init?: RequestInit): Promise<T> {
       ...init,
       headers: {
         "Content-Type": "application/json",
+        "User-Agent":
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36",
         ...(init?.headers || {}),
       },
-      // Reasonable default revalidation; adjust per-page as needed.
-      next: { revalidate: 60, ...(init?.next || {}) },
+      // Fetch at request time to avoid build-time prerender failures (e.g., Cloudflare blocks)
+      cache: "no-store",
+      next: { revalidate: 0, ...(init?.next || {}) },
     });
 
     const contentType = response.headers.get("content-type");
