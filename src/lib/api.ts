@@ -47,11 +47,27 @@ async function fetchJson<T>(path: string, init?: RequestInit): Promise<T> {
 }
 
 export async function getProducts(): Promise<Product[]> {
-  return fetchJson<Product[]>("/products");
+  const products = await fetchJson<Product[]>("/products");
+  
+  if (!products || !Array.isArray(products)) {
+    throw new ApiError("Invalid response: expected array of products", 500);
+  }
+  
+  return products;
 }
 
 export async function getProduct(id: number | string): Promise<Product> {
-  return fetchJson<Product>(`/products/${id}`);
+  if (!id || id === "" || id === "undefined" || id === "null") {
+    throw new ApiError("Invalid product ID", 400);
+  }
+  
+  const product = await fetchJson<Product>(`/products/${id}`);
+  
+  if (!product || typeof product !== "object") {
+    throw new ApiError("Product not found", 404);
+  }
+  
+  return product;
 }
 
 export async function getCategories(): Promise<Category[]> {

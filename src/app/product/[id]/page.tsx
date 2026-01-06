@@ -9,10 +9,17 @@ interface PageProps {
 export default async function ProductPage({ params }: PageProps) {
   const { id } = await params;
   
+  // Validate ID before fetching
+  if (!id || id === "undefined" || id === "null") {
+    notFound();
+  }
+  
   try {
     const product = await getProduct(id);
     
-    if (!product) {
+    // Validate product data
+    if (!product || !product.id || !product.title || !product.price) {
+      console.error("Invalid product data received");
       notFound();
     }
 

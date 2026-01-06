@@ -12,7 +12,13 @@ export default async function Home() {
           Explore our collection of high-quality products.
         </p>
       </div>
-      <ProductGrid products={products} />
+      {products && products.length > 0 ? (
+        <ProductGrid products={products} />
+      ) : (
+        <div className="text-center py-12">
+          <p className="text-muted-foreground">No products available at the moment.</p>
+        </div>
+      )}
     </div>
   );
 }

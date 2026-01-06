@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { formatPrice } from "@/lib/utils";
+import { useState } from "react";
 
 interface ProductCardProps {
   product: Product;
@@ -16,41 +17,60 @@ interface ProductCardProps {
 
 export function ProductCard({ product }: ProductCardProps) {
   const { addItem } = useCart();
+  const [imageError, setImageError] = useState(false);
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault(); // Prevent navigation if clicking the button inside the Link
-    addItem(product);
+    
+    // Validate product before adding to cart
+    if (product && product.id && product.title && product.price) {
+      addItem(product);
+    }
   };
+
+  // Handle missing or invalid product data
+  if (!product || !product.id) {
+    return null;
+  }
 
   return (
     <Card className="h-full flex flex-col overflow-hidden transition-all hover:shadow-lg">
       <Link href={`/product/${product.id}`} className="flex-1">
         <div className="relative aspect-square overflow-hidden bg-white p-4">
-          <Image
-            src={product.image}
-            alt={product.title}
-            fill
-            className="object-contain transition-transform hover:scale-105"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          />
+          {imageError ? (
+            <div className="flex h-full w-full items-center justify-center text-muted-foreground">
+              No Image Available
+            </div>
+          ) : (
+            <Image
+              src={product.image || "/placeholder.png"}
+              alt={product.title || "Product image"}
+              fill
+              className="object-contain transition-transform hover:scale-105"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              onError={() => setImageError(true)}
+            />
+          )}
         </div>
         <CardHeader className="p-4">
           <div className="flex justify-between items-start gap-2">
             <Badge variant="secondary" className="mb-2 capitalize">
-              {product.category}
+              {product.category || "Uncategorized"}
             </Badge>
-            <div className="flex items-center gap-1 text-yellow-500 text-sm">
-              <span>★</span>
-              <span className="text-muted-foreground">{product.rating.rate}</span>
-            </div>
+            {product.rating && (
+              <div className="flex items-center gap-1 text-yellow-500 text-sm">
+                <span>★</span>
+                <span className="text-muted-foreground">{product.rating.rate}</span>
+              </div>
+            )}
           </div>
           <CardTitle className="line-clamp-2 text-lg font-medium leading-tight">
-            {product.title}
+            {product.title || "Untitled Product"}
           </CardTitle>
         </CardHeader>
         <CardContent className="p-4 pt-0">
           <p className="text-xl font-bold text-primary">
-            {formatPrice(product.price)}
+            {formatPrice(product.price || 0)}
           </p>
         </CardContent>
       </Link>

@@ -7,6 +7,7 @@ import { useCart } from "@/hooks/useCart";
 import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/lib/utils";
 import Link from "next/link";
+import { useState } from "react";
 
 interface CartItemProps {
   item: CartItemType;
@@ -15,17 +16,25 @@ interface CartItemProps {
 export function CartItem({ item }: CartItemProps) {
   const { updateQuantity, removeItem } = useCart();
   const { product, quantity } = item;
+  const [imageError, setImageError] = useState(false);
 
   return (
     <div className="flex gap-4 py-4">
       <div className="relative aspect-square h-24 w-24 min-w-24 overflow-hidden rounded-md border bg-white p-2">
-        <Image
-          src={product.image}
-          alt={product.title}
-          fill
-          className="object-contain"
-          sizes="96px"
-        />
+        {imageError ? (
+          <div className="flex h-full w-full items-center justify-center text-muted-foreground text-xs">
+            No Image
+          </div>
+        ) : (
+          <Image
+            src={product.image || "/placeholder.png"}
+            alt={product.title || "Product"}
+            fill
+            className="object-contain"
+            sizes="96px"
+            onError={() => setImageError(true)}
+          />
+        )}
       </div>
       <div className="flex flex-1 flex-col justify-between gap-2">
         <div className="flex justify-between gap-2">
@@ -34,13 +43,13 @@ export function CartItem({ item }: CartItemProps) {
               href={`/product/${product.id}`}
               className="font-medium leading-none hover:underline line-clamp-2"
             >
-              {product.title}
+              {product.title || "Untitled Product"}
             </Link>
             <p className="text-sm text-muted-foreground capitalize">
-              {product.category}
+              {product.category || "Uncategorized"}
             </p>
           </div>
-          <p className="font-medium">{formatPrice(product.price * quantity)}</p>
+          <p className="font-medium">{formatPrice((product.price || 0) * quantity)}</p>
         </div>
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
